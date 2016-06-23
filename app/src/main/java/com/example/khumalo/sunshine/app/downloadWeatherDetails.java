@@ -16,8 +16,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
-public  class downloadWeatherDetails extends AsyncTask< String, Void, Void> {
+public  class downloadWeatherDetails extends AsyncTask< String, Void, String[]> {
 
     // These two need to be declared outside the try/catch
     // so that they can be closed in the finally block.
@@ -127,17 +128,8 @@ public  class downloadWeatherDetails extends AsyncTask< String, Void, Void> {
 
 
 
-
-
-
-
-
-
-
-
-
     @Override
-    protected Void doInBackground(String... params) {
+    protected String[] doInBackground(String... params) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -215,6 +207,12 @@ public  class downloadWeatherDetails extends AsyncTask< String, Void, Void> {
             }
         }
         Log.d(LOG_TAG,forecastJsonStr );
+        try {
+            return getWeatherDataFromJson(forecastJsonStr, numDays);
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
         return null;
     }
 
