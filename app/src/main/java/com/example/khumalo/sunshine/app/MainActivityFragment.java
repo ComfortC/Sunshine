@@ -1,5 +1,6 @@
 package com.example.khumalo.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -94,7 +95,9 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String toDisplay = mForecastAdapter.getItem(position).toString();
-                Toast.makeText(getContext(),toDisplay,Toast.LENGTH_SHORT).show();
+                Intent intent  = new Intent(getActivity(),DetailActivity.class);
+                intent.putExtra("detail",toDisplay);
+                startActivity(intent);
             }
         });
 
