@@ -1,4 +1,5 @@
 package com.example.khumalo.sunshine.app;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -7,8 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class DetailActivity extends ActionBarActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,13 @@ public class DetailActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            Intent intent = getActivity().getIntent();
+            if (intent != null && intent.hasExtra("detail")){
+                String details = intent.getStringExtra("detail");
+                TextView textView = (TextView)rootView.findViewById(R.id.detail_text_view);
+                textView.setText(details);
+            }
+
             return rootView;
         }
     }
