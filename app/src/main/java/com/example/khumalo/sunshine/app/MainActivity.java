@@ -1,11 +1,15 @@
 package com.example.khumalo.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,7 +53,31 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
+        if (id == R.id.action_map) {
+            openPreferredLocationInMap();
+            return true;
+        }
+
+
 
         return super.onOptionsItemSelected(item);
+    }
+    private void openPreferredLocationInMap(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String latitude = prefs.getString(getString(R.string.pref_lat_key), getString(R.string.lat_default));
+        String longitude = prefs.getString(getString(R.string.pref_lon_key),getString(R.string.lon_default));
+
+        String location = "geo:"+latitude+ "," +longitude + "?z=10";
+        Log.d("TAG","The location is "+location);
+        Uri gmmIntentUri = Uri.parse(location);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(gmmIntentUri);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.d("TAG", "Couldn't call " + location + ", no receiving apps installed!");
+        }
     }
 }
