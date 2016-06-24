@@ -1,8 +1,10 @@
 package com.example.khumalo.sunshine.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -64,7 +66,11 @@ public class MainActivityFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
             downloadWeatherDetails weatherTask = new downloadWeatherDetails();
-            weatherTask.execute("-33.992180","18.474089");
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
+            String longitude = prefs.getString(getString(R.string.pref_lon_key),getString(R.string.lon_default));
+
+            weatherTask.execute(latitude,longitude);
             return true;
         }
 

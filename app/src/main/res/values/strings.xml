@@ -13,4 +13,8 @@
 
     <!-- Default postal code for location preference [CHAR LIMIT=NONE] -->
     <string name="pref_location_default" translatable="false">94043</string>
+    <string name="pref_lon_key">Longitude</string>
+    <string name="pref_lat_key">Latitude</string>
+    <string name="lat_default">-33.992180</string>
+    <string name="lon_default">18.474089</string>
 </resources>
