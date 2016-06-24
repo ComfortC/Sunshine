@@ -17,4 +17,6 @@
     <string name="pref_lat_key">Latitude</string>
     <string name="lat_default">-33.992180</string>
     <string name="lon_default">18.474089</string>
+    <string name="temp_pref">Temperature Pref</string>
+    <string name="TemperatureDefaultValue">metric</string>
 </resources>

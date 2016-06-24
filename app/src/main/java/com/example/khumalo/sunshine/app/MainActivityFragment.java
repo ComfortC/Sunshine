@@ -243,6 +243,8 @@ public class MainActivityFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
 
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            units  = prefs.getString(getString(R.string.temp_pref),getString(R.string.TemperatureDefaultValue));
             try {
 
                 final String FORECAST_BASE_URL ="http://api.openweathermap.org/data/2.5/forecast/daily?";
