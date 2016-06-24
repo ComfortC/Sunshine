@@ -65,32 +65,31 @@ public class MainActivityFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            downloadWeatherDetails weatherTask = new downloadWeatherDetails();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
-            String longitude = prefs.getString(getString(R.string.pref_lon_key),getString(R.string.lon_default));
-
-            weatherTask.execute(latitude,longitude);
+            updateWeather();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
 
+    private void updateWeather(){
+        downloadWeatherDetails weatherTask = new downloadWeatherDetails();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
+        String longitude = prefs.getString(getString(R.string.pref_lon_key),getString(R.string.lon_default));
+        weatherTask.execute(latitude,longitude);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        String[] data = {
-                "Mon 6/23 - Sunny - 31/17",
-                "Tue 6/24 - Foggy - 21/8",
-                "Wed 6/25 - Cloudy - 22/17",
-                "Thurs 6/26 - Rainy - 18/11",
-                "Fri 6/27 - Foggy - 21/10",
-                "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
-                "Sun 6/29 - Sunny - 20/7"
-        };
-        ArrayList<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
+
+        ArrayList<String> weekForecast = new ArrayList<String>();
         mForecastAdapter = new ArrayAdapter<String>(getActivity(),R.layout.list_item_forecast,R.id.list_item_forecast_textview,weekForecast);
         View rootView =inflater.inflate(R.layout.fragment_main, container, false);
         ListView listView = (ListView)rootView.findViewById(R.id.listview_forecast);
