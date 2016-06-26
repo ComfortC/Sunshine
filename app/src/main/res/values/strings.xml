@@ -19,6 +19,7 @@
     <string name="lon_default">18.474089</string>
     <string name="temp_pref">Temperature Pref</string>
     <string name="TemperatureDefaultValue">metric</string>
+    <string name="Imperial" >imperial</string>
     <string name="action_map">Map Location</string>
     <string name="action_share">Share</string>
 </resources>
