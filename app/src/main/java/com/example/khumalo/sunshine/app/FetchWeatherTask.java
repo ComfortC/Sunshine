@@ -45,16 +45,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
-public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
+public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
-    private ArrayAdapter<String> mForecastAdapter;
+
     private final Context mContext;
 
-    public FetchWeatherTask(Context context, ArrayAdapter<String> forecastAdapter) {
+    public FetchWeatherTask(Context context) {
         mContext = context;
-        mForecastAdapter = forecastAdapter;
     }
 
     private boolean DEBUG = true;
@@ -177,7 +176,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private String[] getWeatherDataFromJson(String forecastJsonStr,
+    private void getWeatherDataFromJson(String forecastJsonStr,
                                             String locationSetting)
             throws JSONException {
 
@@ -301,11 +300,15 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             }
 
             // add to database
+            int inserted = 0;
+            // add to database
             if ( cVVector.size() > 0 ) {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
-                mContext.getContentResolver().bulkInsert(WeatherEntry.CONTENT_URI, cvArray);
+                inserted = mContext.getContentResolver().bulkInsert(WeatherEntry.CONTENT_URI, cvArray);
             }
+
+            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + inserted + " Inserted");
 
             // Sort order:  Ascending, by date.
             String sortOrder = WeatherEntry.COLUMN_DATE + " ASC";
@@ -328,18 +331,18 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
             Log.d(LOG_TAG, "FetchWeatherTask Complete. " + cVVector.size() + " Inserted");
 
-            String[] resultStrs = convertContentValuesToUXFormat(cVVector);
-            return resultStrs;
+          /*  String[] resultStrs = convertContentValuesToUXFormat(cVVector);
+            return resultStrs;*/
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
-        return null;
+
     }
 
     @Override
-    protected String[] doInBackground(String... params) {
+    protected Void doInBackground(String... params) {
 
         // If there's no zip code, there's nothing to look up.  Verify size of params.
         if (params.length == 0) {
@@ -432,7 +435,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             JSONObject parser = new JSONObject(forecastJsonStr);
             int cityID = parser.getJSONObject("city").getInt("id");
             String locationQuery = Integer.toString(cityID);
-            return getWeatherDataFromJson(forecastJsonStr, locationQuery);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("LocationSetting",locationQuery);
+            editor.apply();
+
+            getWeatherDataFromJson(forecastJsonStr, locationQuery);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -441,7 +449,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         return null;
     }
 
-    @Override
+    /*@Override
     protected void onPostExecute(String[] result) {
         if (result != null && mForecastAdapter != null) {
             mForecastAdapter.clear();
@@ -450,5 +458,5 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             }
             // New data is back from the server.  Hooray!
         }
-    }
+    }*/
 }
