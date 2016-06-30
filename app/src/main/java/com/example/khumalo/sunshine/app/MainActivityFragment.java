@@ -78,7 +78,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void updateWeather(){
-        downloadWeatherDetails weatherTask = new downloadWeatherDetails();
+        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity(),mForecastAdapter);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
         String longitude = prefs.getString(getString(R.string.pref_lon_key),getString(R.string.lon_default));
@@ -111,16 +111,16 @@ public class MainActivityFragment extends Fragment {
         return rootView;
     }
 
-    public  class downloadWeatherDetails extends AsyncTask< String, Void, String[]> {
+   /* public  class downloadWeatherDetails extends AsyncTask< String, Void, String[]> {
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         private final String LOG_TAG = downloadWeatherDetails.class.getSimpleName();
 
 
-        /* The date/time conversion code is going to be moved outside the asynctask later,
+        *//* The date/time conversion code is going to be moved outside the asynctask later,
             * so for convenience we're breaking it out into its own method now.
-            */
+            *//*
         private String getReadableDateString(long time){
             // Because the API returns a unix timestamp (measured in seconds),
             // it must be converted to milliseconds in order to be converted to valid date.
@@ -128,9 +128,9 @@ public class MainActivityFragment extends Fragment {
             return shortenedDateFormat.format(time);
         }
 
-        /**
+        *//**
          * Prepare the weather high/lows for presentation.
-         */
+         *//*
         private String formatHighLows(double high, double low) {
             // For presentation, assume the user doesn't care about tenths of a degree.
             long roundedHigh = Math.round(high);
@@ -140,13 +140,13 @@ public class MainActivityFragment extends Fragment {
             return highLowStr;
         }
 
-        /**
+        *//**
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need to construct the Strings needed for the wireframes.
          *
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
-         */
+         *//*
         private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
                 throws JSONException {
 
@@ -320,7 +320,7 @@ public class MainActivityFragment extends Fragment {
         }
 
 
-    }
+    }*/
 
 
 }

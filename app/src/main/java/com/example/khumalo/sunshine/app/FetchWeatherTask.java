@@ -306,38 +306,40 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         if (params.length == 0) {
             return null;
         }
-        String locationQuery = params[0];
 
-        // These two need to be declared outside the try/catch
-        // so that they can be closed in the finally block.
+
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
+        String longtude = "18.474089";
+        String latitude = "-33.992180";
+        String format = "json";
+        String units = "metric";
 
         // Will contain the raw JSON response as a string.
         String forecastJsonStr = null;
 
-        String format = "json";
-        String units = "metric";
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        units  = prefs.getString(mContext.getString(R.string.temp_pref),mContext.getString(R.string.TemperatureDefaultValue));
         int numDays = 14;
 
         try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
-            final String FORECAST_BASE_URL =
-                    "http://api.openweathermap.org/data/2.5/forecast/daily?";
+
+            final String FORECAST_BASE_URL ="http://api.openweathermap.org/data/2.5/forecast/daily?";
             final String QUERY_PARAM = "q";
             final String FORMAT_PARAM = "mode";
             final String UNITS_PARAM = "units";
             final String DAYS_PARAM = "cnt";
+            final String APPID_PARAM = "APPID";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, params[0])
+                    .appendQueryParameter("lat", params[0])
+                    .appendQueryParameter("lon", params[1])
                     .appendQueryParameter(FORMAT_PARAM, format)
                     .appendQueryParameter(UNITS_PARAM, units)
                     .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
-                    .build();
+                    .appendQueryParameter(APPID_PARAM, "d83ea33d1b513ef282362ec07e456129").build();
 
+            Log.d(LOG_TAG, "Url String is " + builtUri.toString());
             URL url = new URL(builtUri.toString());
 
             // Create the request to OpenWeatherMap, and open the connection
@@ -367,6 +369,8 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
                 return null;
             }
             forecastJsonStr = buffer.toString();
+
+
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
@@ -386,6 +390,9 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         }
 
         try {
+            JSONObject parser = new JSONObject(forecastJsonStr);
+            int cityID = parser.getJSONObject("city").getInt("id");
+            String locationQuery = Integer.toString(cityID);
             return getWeatherDataFromJson(forecastJsonStr, locationQuery);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
