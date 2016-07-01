@@ -146,7 +146,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                    String locationSetting = Utility.getPreferredLocation(getActivity());
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    String locationSetting = prefs.getString("LocationSetting", "3369098");
                     Intent intent = new Intent(getActivity(), DetailActivity.class)
                             .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                                     locationSetting, cursor.getLong(COL_WEATHER_DATE)
