@@ -16,13 +16,25 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String FORECASTFRAGMENT_TAG = "FFTAG";
+
+    private String mLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
+        String longitude = prefs.getString(getString(R.string.pref_lon_key), getString(R.string.lon_default));
+        mLocation = latitude+longitude;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment, new MainActivityFragment(), FORECASTFRAGMENT_TAG)
+                    .commit();
+        }
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +90,23 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             Log.d("TAG", "Couldn't call " + location + ", no receiving apps installed!");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
+        String longitude = prefs.getString(getString(R.string.pref_lon_key), getString(R.string.lon_default));
+        String location = latitude+longitude;
+        // update the location in our second pane using the fragment manager
+        if (location != null && !location.equals(mLocation)) {
+            MainActivityFragment ff = (MainActivityFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            if ( null != ff ) {
+                ff.onLocationChanged();
+            }
+            mLocation = location;
         }
     }
 }
