@@ -50,7 +50,7 @@ public class ForecastAdapter extends CursorAdapter {
      */
     private String formatHighLows(double high, double low) {
         boolean isMetric = com.example.khumalo.sunshine.app.Utility.isMetric(mContext);
-        String highLowStr = com.example.khumalo.sunshine.app.Utility.formatTemperature(high, isMetric) + "/" + com.example.khumalo.sunshine.app.Utility.formatTemperature(low, isMetric);
+        String highLowStr = com.example.khumalo.sunshine.app.Utility.formatTemperature(mContext, high, isMetric) + "/" + com.example.khumalo.sunshine.app.Utility.formatTemperature(mContext, low, isMetric);
         return highLowStr;
     }
 
@@ -136,11 +136,11 @@ public class ForecastAdapter extends CursorAdapter {
 
         // Read high temperature from cursor
         double high = cursor.getDouble(MainActivityFragment.COL_WEATHER_MAX_TEMP);
-        viewHolder.highTempView.setText(Utility.formatTemperature(high, isMetric));
+        viewHolder.highTempView.setText(Utility.formatTemperature(context, high, isMetric));
 
         // Read low temperature from cursor
         double low = cursor.getDouble(MainActivityFragment.COL_WEATHER_MIN_TEMP);
-        viewHolder.lowTempView.setText(Utility.formatTemperature(low, isMetric));
+        viewHolder.lowTempView.setText(Utility.formatTemperature(context,  low, isMetric));
     }
 
 
