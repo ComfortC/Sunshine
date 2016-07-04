@@ -80,7 +80,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     static final int COL_COORD_LAT = 7;
     static final int COL_COORD_LONG = 8;
 
-
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri dateUri);
+    }
 
     public MainActivityFragment() {
     }
@@ -148,11 +153,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 if (cursor != null) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     String locationSetting = prefs.getString("LocationSetting", "3369098");
-                    Intent intent = new Intent(getActivity(), DetailActivity.class)
-                            .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                    ((Callback) getActivity())
+                            .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                                     locationSetting, cursor.getLong(COL_WEATHER_DATE)
                             ));
-                    startActivity(intent);
                 }
             }
         });
