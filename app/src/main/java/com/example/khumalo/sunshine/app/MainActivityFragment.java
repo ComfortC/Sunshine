@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.khumalo.sunshine.app.data.WeatherContract;
 import com.example.khumalo.sunshine.app.service.SunshineService;
+import com.example.khumalo.sunshine.app.sync.SunshineSyncAdapter;
 
 
 /**
@@ -115,14 +116,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        updateWeather();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        updateWeather();
+//    }
 
     private void updateWeather(){
-       // FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+      /* // FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
         String longitude = prefs.getString(getString(R.string.pref_lon_key),getString(R.string.lon_default));
@@ -133,7 +134,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0,alarmIntent, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager am=(AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);*/
+        SunshineSyncAdapter.syncImmediately(getActivity());
 
     }
 
