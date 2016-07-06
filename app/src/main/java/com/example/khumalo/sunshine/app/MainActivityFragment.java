@@ -27,7 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.khumalo.sunshine.app.data.WeatherContract;
-
+import com.example.khumalo.sunshine.app.service.SunshineService;
 
 
 /**
@@ -119,11 +119,15 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     private void updateWeather(){
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+       // FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
         String longitude = prefs.getString(getString(R.string.pref_lon_key),getString(R.string.lon_default));
-        weatherTask.execute(latitude, longitude);
+       // weatherTask.execute(latitude, longitude);
+        Intent intent = new Intent(getActivity(),SunshineService.class);
+        intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA_LATIDUDE,latitude);
+        intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA_LONGTUDE,longitude);
+        getActivity().startService(intent);
     }
 
     @Override

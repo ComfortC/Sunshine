@@ -45,7 +45,7 @@
             android:authorities="com.example.khumalo.sunshine.app"
             android:name=".data.WeatherProvider"/>
 
-
+        <service android:name=".service.SunshineService"/>
 
     </application>
 
