@@ -1,5 +1,8 @@
 package com.example.khumalo.sunshine.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -124,10 +127,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         String latitude = prefs.getString(getString(R.string.pref_lat_key),getString(R.string.lat_default));
         String longitude = prefs.getString(getString(R.string.pref_lon_key),getString(R.string.lon_default));
        // weatherTask.execute(latitude, longitude);
-        Intent intent = new Intent(getActivity(),SunshineService.class);
-        intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA_LATIDUDE,latitude);
-        intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA_LONGTUDE,longitude);
-        getActivity().startService(intent);
+        Intent alarmIntent = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
+        alarmIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA_LATIDUDE,latitude);
+        alarmIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA_LONGTUDE, longitude);
+
+        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0,alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager am=(AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);
+
     }
 
     @Override

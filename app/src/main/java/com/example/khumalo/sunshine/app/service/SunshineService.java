@@ -1,7 +1,9 @@
 package com.example.khumalo.sunshine.app.service;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -325,6 +327,19 @@ public class SunshineService extends IntentService {
         locationCursor.close();
         // Wait, that worked?  Yes!
         return locationId;
+    }
+
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Intent sendIntent = new Intent(context, SunshineService.class);
+            sendIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA_LATIDUDE, intent.getStringExtra(SunshineService.LOCATION_QUERY_EXTRA_LATIDUDE));
+            sendIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA_LONGTUDE, intent.getStringExtra(SunshineService.LOCATION_QUERY_EXTRA_LONGTUDE));
+            context.startService(sendIntent);
+        }
     }
 
 }
