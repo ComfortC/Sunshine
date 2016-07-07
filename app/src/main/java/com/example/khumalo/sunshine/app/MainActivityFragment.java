@@ -100,7 +100,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-         inflater.inflate(R.menu.forecastfragment, menu);
+         //inflater.inflate(R.menu.forecastfragment, menu);
         }
 
     @Override
@@ -109,10 +109,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
+        /*if (id == R.id.action_refresh) {
             updateWeather();
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
