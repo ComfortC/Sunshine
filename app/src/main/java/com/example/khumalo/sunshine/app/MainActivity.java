@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.khumalo.sunshine.app.sync.SunshineSyncAdapter;
+
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -66,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                         .setAction("Action", null).show();
             }
         });
+
+        SunshineSyncAdapter.initializeSyncAdapter(this);
     }
 
     @Override
